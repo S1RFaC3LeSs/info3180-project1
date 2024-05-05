@@ -5,8 +5,12 @@ Werkzeug Documentation:  https://werkzeug.palletsprojects.com/
 This file contains the routes for your application.
 """
 
-from app import app
-from flask import render_template, request, redirect, url_for
+import os
+from app import app, db
+from app.models import Property
+from app.forms import PropertyForm
+from werkzeug.utils import secure_filename
+from flask import render_template, request, redirect, url_for, flash, send_from_directory
 
 
 ###
@@ -24,10 +28,53 @@ def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
 
+# Fetch all properties
+@app.route('/properties')
+def properties():
+    properties = Property.query.all()
+    return render_template("properties.html", properties=properties)
+
+@app.route('/properties/create', methods=['GET', 'POST'])
+def create():
+    form = PropertyForm()
+    if form.validate_on_submit():
+        photo = form.photo.data
+        filename = secure_filename(photo.filename)
+        property_ = Property(
+            title=form.title.data,
+            numBedrms=form.numBedrms.data,
+            numBathrms=form.numBathrms.data,
+            location=form.location.data,
+            price=form.price.data,
+            propType=form.propType.data,
+            description=form.description.data,
+            photo_filename=filename
+        )
+        photo.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+        db.session.add(property_)
+        db.session.commit()
+        flash("Successfully Added")
+        return redirect(url_for('properties'))
+    return render_template("create.html", form=form)
+
+# Fetch a specific property by ID
+@app.route('/properties/<propertyid>')
+def property(propertyid):
+    prop = Property.query.get_or_404(propertyid)
+    return render_template('property.html', property=prop)
+
+# Serve uploaded images
+@app.route('/uploads/<filename>')
+def get_image(filename):
+    return send_from_directory(os.path.join(os.getcwd(), app.config['UPLOAD_FOLDER']), filename)
+
 
 ###
 # The functions below should be applicable to all Flask apps.
 ###
+
+# Create new property
+
 
 # Display Flask WTF errors as Flash messages
 def flash_errors(form):

@@ -1,3 +1,95 @@
 body {
     padding-top: 5rem;
 }
+
+button a {
+    text-decoration: none;
+    color: inherit;
+}
+
+label {
+    font-weight: bold;
+}
+
+.properties-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 10px;
+}
+
+.property-container {
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    width: 300px;
+    margin: auto;
+    background-color: antiquewhite;
+    border-radius: 5px;
+    overflow: auto;
+}
+
+.property-container button {
+    width: 100%;
+    margin-top: auto;
+    color: white;
+    background-color: purple;
+}
+
+.property-container img {
+    height: 50%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.property-container p:last-of-type {
+    background-color: green;
+    border-radius: 7px;
+}
+
+.property-container p {
+    margin: 10px;
+}
+
+.single-property {
+    display: flex;
+    border: solid black 1px;
+    border-radius: 5px;
+    width: 800px;
+    height: 400px;
+}
+
+.single-property img {
+    width: 40%;
+    object-fit: cover;
+}
+
+.side-by-side {
+    display: flex;
+    gap: 10px;
+}
+
+.side-content {
+    flex: 1;
+    padding-left: 20px;
+    background-color: antiquewhite;
+}
+
+.side-content button {
+    color: white;
+    border-radius: 5px;
+    background-color: purple;
+}
+
+.side-content :nth-child(2) :nth-child(1) {
+    background-color: green;
+    border-radius: 10px;
+}
+
+.side-content :nth-child(2) :nth-child(2) {
+    background-color: yellow;
+    border-radius: 10px;
+}
+
+.add-prop {
+    width: 700px;
+}
